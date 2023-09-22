@@ -52,43 +52,36 @@ func (clt *Client) SetMode(value string) {
 
 // Call an API using Client
 func (clt *Client) Call(method string, path string, headers map[string]interface{}, params map[string]interface{}) (map[string]interface{}, error) {
-	// Ensure that the client is initialized once
 	clt.ensureClientInitialized()
 
-	// Create the full URL path by combining the endpoint and path
 	urlPath := clt.endpoint + path
-
-	// Check if the request method is GET
 	isGet := strings.ToUpper(method) == "GET"
 
-	// Prepare the request body for non-GET requests
 	var reqBody io.Reader
 	if !isGet {
 		reqBody = prepareRequestBody(params)
 	}
 
-	// Create the HTTP request
 	req, err := http.NewRequest(method, urlPath, reqBody)
 	if err != nil {
 		return nil, err
 	}
 
-	// Set the client headers and custom headers
 	setHeaders(req, clt.headers, headers)
 
-	// Update the query parameters for GET requests
 	if isGet {
 		updateQueryParameters(req, params)
+	} else {
+		// Set the Content-Type header for non-GET requests
+		req.Header.Set("Content-Type", "application/json")
 	}
 
-	// Make the HTTP request
 	response, err := clt.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	// Read and parse the response JSON
 	jsonResponse, err := parseJSONResponse(response)
 	if err != nil {
 		return nil, err
@@ -105,13 +98,12 @@ func (clt *Client) ensureClientInitialized() {
 }
 
 func prepareRequestBody(params map[string]interface{}) io.Reader {
-	// Marshal the params map into a JSON string
 	jsonData, err := json.Marshal(params)
 	if err != nil {
-		// Handle the error, e.g., return an error response or log it
+		// Handle the error
 		return nil
 	}
-	log.Println("JSON Data: " + string(jsonData))
+	log.Println(string(jsonData))
 	return bytes.NewReader(jsonData)
 }
 
