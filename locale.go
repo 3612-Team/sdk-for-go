@@ -1,32 +1,28 @@
 package appwrite
 
-import (
-)
-
 // Locale service
 type Locale struct {
 	client Client
 }
 
-func NewLocale(clt Client) Locale {  
-    service := Locale{
+func NewLocale(clt Client) Locale {
+	service := Locale{
 		client: clt,
 	}
 
-    return service
+	return service
 }
 
 // Get get the current user location based on IP. Returns an object with user
 // country code, country name, continent name, continent code, ip address and
 // suggested currency. You can use the locale header to get the data in a
 // supported language.
-// 
+//
 // ([IP Geolocation by DB-IP](https://db-ip.com))
 func (srv *Locale) Get() (map[string]interface{}, error) {
 	path := "/locale"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -36,8 +32,7 @@ func (srv *Locale) Get() (map[string]interface{}, error) {
 func (srv *Locale) GetContinents() (map[string]interface{}, error) {
 	path := "/locale/continents"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -47,8 +42,7 @@ func (srv *Locale) GetContinents() (map[string]interface{}, error) {
 func (srv *Locale) GetCountries() (map[string]interface{}, error) {
 	path := "/locale/countries"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -58,8 +52,7 @@ func (srv *Locale) GetCountries() (map[string]interface{}, error) {
 func (srv *Locale) GetCountriesEU() (map[string]interface{}, error) {
 	path := "/locale/countries/eu"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -69,8 +62,7 @@ func (srv *Locale) GetCountriesEU() (map[string]interface{}, error) {
 func (srv *Locale) GetCountriesPhones() (map[string]interface{}, error) {
 	path := "/locale/countries/phones"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -81,8 +73,7 @@ func (srv *Locale) GetCountriesPhones() (map[string]interface{}, error) {
 func (srv *Locale) GetCurrencies() (map[string]interface{}, error) {
 	path := "/locale/currencies"
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }

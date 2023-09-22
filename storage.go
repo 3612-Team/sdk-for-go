@@ -9,12 +9,12 @@ type Storage struct {
 	client Client
 }
 
-func NewStorage(clt Client) Storage {  
-    service := Storage{
+func NewStorage(clt Client) Storage {
+	service := Storage{
 		client: clt,
 	}
 
-    return service
+	return service
 }
 
 // ListFiles get a list of all the user files. You can use the query params to
@@ -24,9 +24,9 @@ func (srv *Storage) ListFiles(Search string, Limit int, Offset int, OrderType st
 	path := "/storage/files"
 
 	params := map[string]interface{}{
-		"search": Search,
-		"limit": Limit,
-		"offset": Offset,
+		"search":    Search,
+		"limit":     Limit,
+		"offset":    Offset,
 		"orderType": OrderType,
 	}
 
@@ -40,8 +40,8 @@ func (srv *Storage) CreateFile(File string, Read []interface{}, Write []interfac
 	path := "/storage/files"
 
 	params := map[string]interface{}{
-		"file": File,
-		"read": Read,
+		"file":  File,
+		"read":  Read,
 		"write": Write,
 	}
 
@@ -54,8 +54,7 @@ func (srv *Storage) GetFile(FileId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{fileId}", FileId)
 	path := r.Replace("/storage/files/{fileId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -67,7 +66,7 @@ func (srv *Storage) UpdateFile(FileId string, Read []interface{}, Write []interf
 	path := r.Replace("/storage/files/{fileId}")
 
 	params := map[string]interface{}{
-		"read": Read,
+		"read":  Read,
 		"write": Write,
 	}
 
@@ -80,8 +79,7 @@ func (srv *Storage) DeleteFile(FileId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{fileId}", FileId)
 	path := r.Replace("/storage/files/{fileId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("DELETE", path, nil, params)
 }
@@ -93,8 +91,7 @@ func (srv *Storage) GetFileDownload(FileId string) (map[string]interface{}, erro
 	r := strings.NewReplacer("{fileId}", FileId)
 	path := r.Replace("/storage/files/{fileId}/download")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -109,11 +106,11 @@ func (srv *Storage) GetFilePreview(FileId string, Width int, Height int, Quality
 	path := r.Replace("/storage/files/{fileId}/preview")
 
 	params := map[string]interface{}{
-		"width": Width,
-		"height": Height,
-		"quality": Quality,
+		"width":      Width,
+		"height":     Height,
+		"quality":    Quality,
 		"background": Background,
-		"output": Output,
+		"output":     Output,
 	}
 
 	return srv.client.Call("GET", path, nil, params)

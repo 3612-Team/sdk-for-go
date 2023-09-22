@@ -9,12 +9,12 @@ type Database struct {
 	client Client
 }
 
-func NewDatabase(clt Client) Database {  
-    service := Database{
+func NewDatabase(clt Client) Database {
+	service := Database{
 		client: clt,
 	}
 
-    return service
+	return service
 }
 
 // ListCollections get a list of all the user collections. You can use the
@@ -25,9 +25,9 @@ func (srv *Database) ListCollections(Search string, Limit int, Offset int, Order
 	path := "/database/collections"
 
 	params := map[string]interface{}{
-		"search": Search,
-		"limit": Limit,
-		"offset": Offset,
+		"search":    Search,
+		"limit":     Limit,
+		"offset":    Offset,
 		"orderType": OrderType,
 	}
 
@@ -39,8 +39,8 @@ func (srv *Database) CreateCollection(Name string, Read []interface{}, Write []i
 	path := "/database/collections"
 
 	params := map[string]interface{}{
-		"name": Name,
-		"read": Read,
+		"name":  Name,
+		"read":  Read,
 		"write": Write,
 		"rules": Rules,
 	}
@@ -54,8 +54,7 @@ func (srv *Database) GetCollection(CollectionId string) (map[string]interface{},
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -66,8 +65,8 @@ func (srv *Database) UpdateCollection(CollectionId string, Name string, Read []i
 	path := r.Replace("/database/collections/{collectionId}")
 
 	params := map[string]interface{}{
-		"name": Name,
-		"read": Read,
+		"name":  Name,
+		"read":  Read,
 		"write": Write,
 		"rules": Rules,
 	}
@@ -81,8 +80,7 @@ func (srv *Database) DeleteCollection(CollectionId string) (map[string]interface
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("DELETE", path, nil, params)
 }
@@ -96,31 +94,31 @@ func (srv *Database) ListDocuments(CollectionId string, Filters []interface{}, O
 	path := r.Replace("/database/collections/{collectionId}/documents")
 
 	params := map[string]interface{}{
-		"filters": Filters,
-		"offset": Offset,
-		"limit": Limit,
+		"filters":     Filters,
+		"offset":      Offset,
+		"limit":       Limit,
 		"order-field": OrderField,
-		"order-type": OrderType,
-		"order-cast": OrderCast,
-		"search": Search,
-		"first": First,
-		"last": Last,
+		"order-type":  OrderType,
+		"order-cast":  OrderCast,
+		"search":      Search,
+		"first":       First,
+		"last":        Last,
 	}
 
 	return srv.client.Call("GET", path, nil, params)
 }
 
 // CreateDocument create a new Document.
-func (srv *Database) CreateDocument(CollectionId string, Data object, Read []interface{}, Write []interface{}, ParentDocument string, ParentProperty string, ParentPropertyType string) (map[string]interface{}, error) {
+func (srv *Database) CreateDocument(CollectionId string, Data interface{}, Read []interface{}, Write []interface{}, ParentDocument string, ParentProperty string, ParentPropertyType string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId)
 	path := r.Replace("/database/collections/{collectionId}/documents")
 
 	params := map[string]interface{}{
-		"data": Data,
-		"read": Read,
-		"write": Write,
-		"parentDocument": ParentDocument,
-		"parentProperty": ParentProperty,
+		"data":               Data,
+		"read":               Read,
+		"write":              Write,
+		"parentDocument":     ParentDocument,
+		"parentProperty":     ParentProperty,
 		"parentPropertyType": ParentPropertyType,
 	}
 
@@ -133,20 +131,19 @@ func (srv *Database) GetDocument(CollectionId string, DocumentId string) (map[st
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
 	path := r.Replace("/database/collections/{collectionId}/documents/{documentId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
 
 // UpdateDocument
-func (srv *Database) UpdateDocument(CollectionId string, DocumentId string, Data object, Read []interface{}, Write []interface{}) (map[string]interface{}, error) {
+func (srv *Database) UpdateDocument(CollectionId string, DocumentId string, Data interface{}, Read []interface{}, Write []interface{}) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
 	path := r.Replace("/database/collections/{collectionId}/documents/{documentId}")
 
 	params := map[string]interface{}{
-		"data": Data,
-		"read": Read,
+		"data":  Data,
+		"read":  Read,
 		"write": Write,
 	}
 
@@ -160,8 +157,7 @@ func (srv *Database) DeleteDocument(CollectionId string, DocumentId string) (map
 	r := strings.NewReplacer("{collectionId}", CollectionId, "{documentId}", DocumentId)
 	path := r.Replace("/database/collections/{collectionId}/documents/{documentId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("DELETE", path, nil, params)
 }

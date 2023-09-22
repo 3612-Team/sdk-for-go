@@ -9,12 +9,12 @@ type Avatars struct {
 	client Client
 }
 
-func NewAvatars(clt Client) Avatars {  
-    service := Avatars{
+func NewAvatars(clt Client) Avatars {
+	service := Avatars{
 		client: clt,
 	}
 
-    return service
+	return service
 }
 
 // GetBrowser you can use this endpoint to show different browser icons to
@@ -26,8 +26,8 @@ func (srv *Avatars) GetBrowser(Code string, Width int, Height int, Quality int) 
 	path := r.Replace("/avatars/browsers/{code}")
 
 	params := map[string]interface{}{
-		"width": Width,
-		"height": Height,
+		"width":   Width,
+		"height":  Height,
 		"quality": Quality,
 	}
 
@@ -43,15 +43,15 @@ func (srv *Avatars) GetCreditCard(Code string, Width int, Height int, Quality in
 	path := r.Replace("/avatars/credit-cards/{code}")
 
 	params := map[string]interface{}{
-		"width": Width,
-		"height": Height,
+		"width":   Width,
+		"height":  Height,
 		"quality": Quality,
 	}
 
 	return srv.client.Call("GET", path, nil, params)
 }
 
-// GetFavicon use this endpoint to fetch the favorite icon (AKA favicon) of a 
+// GetFavicon use this endpoint to fetch the favorite icon (AKA favicon) of a
 // any remote website URL.
 func (srv *Avatars) GetFavicon(Url string) (map[string]interface{}, error) {
 	path := "/avatars/favicon"
@@ -71,8 +71,8 @@ func (srv *Avatars) GetFlag(Code string, Width int, Height int, Quality int) (ma
 	path := r.Replace("/avatars/flags/{code}")
 
 	params := map[string]interface{}{
-		"width": Width,
-		"height": Height,
+		"width":   Width,
+		"height":  Height,
 		"quality": Quality,
 	}
 
@@ -87,8 +87,8 @@ func (srv *Avatars) GetImage(Url string, Width int, Height int) (map[string]inte
 	path := "/avatars/image"
 
 	params := map[string]interface{}{
-		"url": Url,
-		"width": Width,
+		"url":    Url,
+		"width":  Width,
 		"height": Height,
 	}
 
@@ -101,9 +101,9 @@ func (srv *Avatars) GetQR(Text string, Size int, Margin int, Download int) (map[
 	path := "/avatars/qr"
 
 	params := map[string]interface{}{
-		"text": Text,
-		"size": Size,
-		"margin": Margin,
+		"text":     Text,
+		"size":     Size,
+		"margin":   Margin,
 		"download": Download,
 	}
 

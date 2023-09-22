@@ -2,7 +2,7 @@ package appwrite
 
 import (
 	"encoding/json"
-  	"io/ioutil"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -104,7 +104,7 @@ func (clt *Client) Call(method string, path string, headers map[string]interface
 
 	// Handle response
 	defer response.Body.Close()
- 
+
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err

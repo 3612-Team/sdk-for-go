@@ -9,12 +9,12 @@ type Teams struct {
 	client Client
 }
 
-func NewTeams(clt Client) Teams {  
-    service := Teams{
+func NewTeams(clt Client) Teams {
+	service := Teams{
 		client: clt,
 	}
 
-    return service
+	return service
 }
 
 // List get a list of all the current user teams. You can use the query params
@@ -25,9 +25,9 @@ func (srv *Teams) List(Search string, Limit int, Offset int, OrderType string) (
 	path := "/teams"
 
 	params := map[string]interface{}{
-		"search": Search,
-		"limit": Limit,
-		"offset": Offset,
+		"search":    Search,
+		"limit":     Limit,
+		"offset":    Offset,
 		"orderType": OrderType,
 	}
 
@@ -42,7 +42,7 @@ func (srv *Teams) Create(Name string, Roles []interface{}) (map[string]interface
 	path := "/teams"
 
 	params := map[string]interface{}{
-		"name": Name,
+		"name":  Name,
 		"roles": Roles,
 	}
 
@@ -55,8 +55,7 @@ func (srv *Teams) Get(TeamId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -80,8 +79,7 @@ func (srv *Teams) Delete(TeamId string) (map[string]interface{}, error) {
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("DELETE", path, nil, params)
 }
@@ -92,8 +90,7 @@ func (srv *Teams) GetMemberships(TeamId string) (map[string]interface{}, error) 
 	r := strings.NewReplacer("{teamId}", TeamId)
 	path := r.Replace("/teams/{teamId}/memberships")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("GET", path, nil, params)
 }
@@ -102,12 +99,12 @@ func (srv *Teams) GetMemberships(TeamId string) (map[string]interface{}, error) 
 // team. An email with a link to join the team will be sent to the new member
 // email address if the member doesn't exist in the project it will be created
 // automatically.
-// 
+//
 // Use the 'URL' parameter to redirect the user from the invitation email back
 // to your app. When the user is redirected, use the [Update Team Membership
 // Status](/docs/teams#updateMembershipStatus) endpoint to allow the user to
 // accept the invitation to the team.
-// 
+//
 // Please note that in order to avoid a [Redirect
 // Attacks](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.md)
 // the only valid redirect URL's are the once from domains you have set when
@@ -118,9 +115,9 @@ func (srv *Teams) CreateMembership(TeamId string, Email string, Roles []interfac
 
 	params := map[string]interface{}{
 		"email": Email,
-		"name": Name,
+		"name":  Name,
 		"roles": Roles,
-		"url": Url,
+		"url":   Url,
 	}
 
 	return srv.client.Call("POST", path, nil, params)
@@ -133,8 +130,7 @@ func (srv *Teams) DeleteMembership(TeamId string, InviteId string) (map[string]i
 	r := strings.NewReplacer("{teamId}", TeamId, "{inviteId}", InviteId)
 	path := r.Replace("/teams/{teamId}/memberships/{inviteId}")
 
-	params := map[string]interface{}{
-	}
+	params := map[string]interface{}{}
 
 	return srv.client.Call("DELETE", path, nil, params)
 }
