@@ -2,7 +2,7 @@ package appwrite
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -51,67 +51,91 @@ func (clt *Client) SetMode(value string) {
 
 // Call an API using Client
 func (clt *Client) Call(method string, path string, headers map[string]interface{}, params map[string]interface{}) (map[string]interface{}, error) {
-	if clt.client == nil {
-		// Create HTTP client
-		clt.client = &http.Client{}
-	}
+	// Ensure that the client is initialized once
+	clt.ensureClientInitialized()
 
-	if clt.selfSigned {
-		// Allow self signed requests
-	}
-
+	// Create the full URL path by combining the endpoint and path
 	urlPath := clt.endpoint + path
+
+	// Check if the request method is GET
 	isGet := strings.ToUpper(method) == "GET"
 
-	var reqBody *strings.Reader
+	// Prepare the request body for non-GET requests
+	var reqBody io.Reader
 	if !isGet {
-		frm := url.Values{}
-		for key, val := range params {
-			frm.Add(key, ToString(val))
-		}
-		reqBody = strings.NewReader(frm.Encode())
+		reqBody = prepareRequestBody(params)
 	}
 
-	// Create and modify HTTP request before sending
+	// Create the HTTP request
 	req, err := http.NewRequest(method, urlPath, reqBody)
 	if err != nil {
 		return nil, err
 	}
 
-	// Set Client headers
-	for key, val := range clt.headers {
-		req.Header.Set(key, ToString(val))
-	}
+	// Set the client headers and custom headers
+	setHeaders(req, clt.headers, headers)
 
-	// Set Custom headers
-	for key, val := range headers {
-		req.Header.Set(key, ToString(val))
-	}
-
+	// Update the query parameters for GET requests
 	if isGet {
-		q := req.URL.Query()
-		for key, val := range params {
-			q.Add(key, ToString(val))
-		}
-		req.URL.RawQuery = q.Encode()
+		updateQueryParameters(req, params)
 	}
 
-	// Make request
+	// Make the HTTP request
 	response, err := clt.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
-	// Handle response
 	defer response.Body.Close()
 
-	responseData, err := ioutil.ReadAll(response.Body)
+	// Read and parse the response JSON
+	jsonResponse, err := parseJSONResponse(response)
 	if err != nil {
 		return nil, err
 	}
 
-	var jsonResponse map[string]interface{}
-	json.Unmarshal(responseData, &jsonResponse)
+	return jsonResponse, nil
+}
 
+func (clt *Client) ensureClientInitialized() {
+	if clt.client == nil {
+		// Create HTTP client if it's not initialized
+		clt.client = &http.Client{}
+	}
+}
+
+func prepareRequestBody(params map[string]interface{}) io.Reader {
+	frm := url.Values{}
+	for key, val := range params {
+		frm.Add(key, ToString(val))
+	}
+	return strings.NewReader(frm.Encode())
+}
+
+func setHeaders(req *http.Request, clientHeaders map[string]string, customHeaders map[string]interface{}) {
+	// Set Client headers
+	for key, val := range clientHeaders {
+		req.Header.Set(key, val)
+	}
+
+	// Set Custom headers
+	for key, val := range customHeaders {
+		req.Header.Set(key, ToString(val))
+	}
+}
+
+func updateQueryParameters(req *http.Request, params map[string]interface{}) {
+	q := req.URL.Query()
+	for key, val := range params {
+		q.Add(key, ToString(val))
+	}
+	req.URL.RawQuery = q.Encode()
+}
+
+func parseJSONResponse(response *http.Response) (map[string]interface{}, error) {
+	var jsonResponse map[string]interface{}
+	err := json.NewDecoder(response.Body).Decode(&jsonResponse)
+	if err != nil {
+		return nil, err
+	}
 	return jsonResponse, nil
 }

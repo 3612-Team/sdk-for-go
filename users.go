@@ -37,10 +37,10 @@ func (srv *Users) Create(Email string, Password string, Name string, userId stri
 	path := "/users"
 
 	params := map[string]interface{}{
+		"userId":   userId,
 		"email":    Email,
 		"password": Password,
 		"name":     Name,
-		"userId":   userId,
 	}
 
 	return srv.client.Call("POST", path, nil, params)
