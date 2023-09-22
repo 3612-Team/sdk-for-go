@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -110,6 +111,7 @@ func prepareRequestBody(params map[string]interface{}) io.Reader {
 		// Handle the error, e.g., return an error response or log it
 		return nil
 	}
+	log.Println("JSON Data: " + string(jsonData))
 	return bytes.NewReader(jsonData)
 }
 
