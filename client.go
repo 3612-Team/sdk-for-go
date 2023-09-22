@@ -3,6 +3,7 @@ package appwrite
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -107,8 +108,11 @@ func prepareRequestBody(params map[string]interface{}) io.Reader {
 	frm := url.Values{}
 	for key, val := range params {
 		frm.Add(key, ToString(val))
+		log.Println("Key: " + key + " Value: " + ToString(val))
 	}
-	return strings.NewReader(frm.Encode())
+	// encode to json string
+	jsonStr, _ := json.Marshal(params)
+	return strings.NewReader(string(jsonStr))
 }
 
 func setHeaders(req *http.Request, clientHeaders map[string]string, customHeaders map[string]interface{}) {
