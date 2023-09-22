@@ -1,11 +1,10 @@
 package appwrite
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
@@ -105,14 +104,13 @@ func (clt *Client) ensureClientInitialized() {
 }
 
 func prepareRequestBody(params map[string]interface{}) io.Reader {
-	frm := url.Values{}
-	for key, val := range params {
-		frm.Add(key, ToString(val))
-		log.Println("Key: " + key + " Value: " + ToString(val))
+	// Marshal the params map into a JSON string
+	jsonData, err := json.Marshal(params)
+	if err != nil {
+		// Handle the error, e.g., return an error response or log it
+		return nil
 	}
-	// encode to json string
-	jsonStr, _ := json.Marshal(params)
-	return strings.NewReader(string(jsonStr))
+	return bytes.NewReader(jsonData)
 }
 
 func setHeaders(req *http.Request, clientHeaders map[string]string, customHeaders map[string]interface{}) {
