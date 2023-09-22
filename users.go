@@ -33,13 +33,14 @@ func (srv *Users) List(Search string, Limit int, Offset int, OrderType string) (
 }
 
 // Create create a new user.
-func (srv *Users) Create(Email string, Password string, Name string) (map[string]interface{}, error) {
+func (srv *Users) Create(Email string, Password string, Name string, userId string) (map[string]interface{}, error) {
 	path := "/users"
 
 	params := map[string]interface{}{
 		"email":    Email,
 		"password": Password,
 		"name":     Name,
+		"userId":   userId,
 	}
 
 	return srv.client.Call("POST", path, nil, params)
